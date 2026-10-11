@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soumendra Sir' s Biology Classes - NEET BIOLOGY XI EXAM SERIES 8 SET A</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for Graphical Feedback Report -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2canvas for Secure Score Card Image Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; user-select: none; }
+        .palette-btn { width: 38px; height: 38px; font-weight: 600; font-size: 0.85rem; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; cursor: pointer; }
+        .status-not-visited { background-color: #e2e8f0; color: #475569; }
+        .status-not-answered { background-color: #ef4444; color: #ffffff; }
+        .status-answered { background-color: #22c55e; color: #ffffff; }
+        .status-marked { background-color: #a855f7; color: #ffffff; }
+        .status-answered-marked { background-color: #3b82f6; color: #ffffff; position: relative; }
+        .watermark { position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.04; font-size: 3rem; font-weight: bold; color: #000; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-around; transform: rotate(-30deg); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Security Watermark -->
+    <div id="watermarkContainer" class="watermark"></div>
+
+    <!-- HEADER -->
+    <header class="bg-slate-900 text-white shadow-md py-3 px-6 flex justify-between items-center z-20">
+        <div>
+            <h1 class="text-lg font-bold tracking-wide text-amber-400">Soumendra Sir' s Biology Classes-8910587106</h1>
+            <p class="text-xs text-slate-300">NEET BIOLOGY XI EXAM SERIES 8 SET A | Topic: Respiration in Plants</p>
+        </div>
+        <div id="headerTimerSection" class="hidden items-center space-x-6">
+            <div class="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 flex items-center space-x-2">
+                <i class="fa-solid fa-clock text-amber-400"></i>
+                <span class="text-xs text-slate-400">Time Left:</span>
+                <span id="timerDisplay" class="font-mono font-bold text-lg text-amber-400">01:00:00</span>
+            </div>
+            <div class="text-right text-xs">
+                <p id="candidateNameDisplay" class="font-semibold text-slate-200"></p>
+                <p class="text-slate-400">Total Marks: 360 | +4 / -1</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+
+        <!-- 1. LOGIN / VERIFICATION SCREEN -->
+        <section id="loginScreen" class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8 border border-slate-200">
+            <div class="text-center mb-6">
+                <div class="inline-block p-3 bg-amber-100 text-amber-600 rounded-full mb-3">
+                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900">Candidate Verification</h2>
+                <p class="text-sm text-slate-500 mt-1">Enter your details and secure exam credentials</p>
+            </div>
+
+            <form id="verificationForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                    <input type="text" id="userNameInput" required placeholder="Enter your full name" 
+                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Exam Date Password (Format: DDMMYYYY)</label>
+                    <input type="password" id="examPasswordInput" required placeholder="Enter exam date password" 
+                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    <p class="text-xs text-slate-400 mt-1">Hint: Today's date in DDMMYYYY format (e.g., 11102026)</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Security Captcha</label>
+                    <div class="flex items-center space-x-3 mb-2">
+                        <span id="captchaBox" class="bg-slate-200 font-mono font-bold text-lg px-4 py-2 rounded-lg tracking-widest select-none text-slate-700"></span>
+                        <button type="button" id="refreshCaptcha" class="text-slate-500 hover:text-slate-700 p-2"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                    <input type="text" id="captchaInput" required placeholder="Enter captcha text" 
+                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+
+                <button type="submit" class="w-full bg-slate-900 text-white font-semibold py-3 rounded-lg hover:bg-slate-800 transition duration-200 shadow-md">
+                    Proceed to Instructions & Exam
+                </button>
+            </form>
+        </section>
+
+        <!-- 2. INSTRUCTIONS SCREEN -->
+        <section id="instructionsScreen" class="hidden bg-white rounded-2xl shadow-xl w-full max-w-3xl p-8 border border-slate-200">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4 border-b pb-3">Exam Instructions & Guidelines</h2>
+            
+            <div class="space-y-4 text-sm text-slate-600 mb-6 max-h-96 overflow-y-auto pr-2">
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                    <p class="font-semibold text-amber-800">Important Note on Exam Integrity:</p>
+                    <p class="text-amber-700">This examination is strictly proctored. Full-screen mode is mandatory, tab-switching/blurring is monitored, and copy-pasting is disabled.</p>
+                </div>
+                
+                <h3 class="font-bold text-slate-800 text-base">Structure of Examination:</h3>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li><strong>Topic:</strong> NEET BIOLOGY XI EXAM SERIES 8 SET A (Respiration in Plants).</li>
+                    <li><strong>Total Questions:</strong> 90 Multiple Choice Questions (MCQs).</li>
+                    <li><strong>Total Marks:</strong> 360 Marks.</li>
+                    <li><strong>Marking Scheme:</strong> +4 Marks for every correct answer, -1 Mark for every incorrect answer, 0 for unattempted.</li>
+                    <li><strong>Duration:</strong> 1 Hour (60 Minutes). Timer will start automatically upon beginning the test.</li>
+                </ul>
+
+                <h3 class="font-bold text-slate-800 text-base">Question Pattern Distribution:</h3>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>20 Statement-based questions</li>
+                    <li>20 Assertion & Reasoning based questions</li>
+                    <li>20 Case-study based questions</li>
+                    <li>25 Critical Thinking based questions</li>
+                    <li>5 Diagram-based questions</li>
+                </ul>
+
+                <h3 class="font-bold text-slate-800 text-base">Palette Color Coding:</h3>
+                <div class="grid grid-cols-2 gap-2 pt-2">
+                    <div class="flex items-center space-x-2"><div class="palette-btn status-not-visited">0</div><span>Not Visited</span></div>
+                    <div class="flex items-center space-x-2"><div class="palette-btn status-not-answered">0</div><span>Not Answered</span></div>
+                    <div class="flex items-center space-x-2"><div class="palette-btn status-answered">0</div><span>Answered</span></div>
+                    <div class="flex items-center space-x-2"><div class="palette-btn status-marked">0</div><span>Marked for Review</span></div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3 mb-6">
+                <input type="checkbox" id="agreeCheckbox" class="w-4 h-4 text-amber-600 rounded focus:ring-amber-500">
+                <label for="agreeCheckbox" class="text-sm font-medium text-slate-700">I have read and understood all instructions. I agree to abide by the proctoring rules.</label>
+            </div>
+
+            <button id="startExamBtn" disabled class="w-full bg-slate-400 text-white font-semibold py-3 rounded-lg cursor-not-allowed transition duration-200">
+                Start Examination
+            </button>
+        </section>
+
+        <!-- 3. EXAM CBT INTERFACE -->
+        <section id="examScreen" class="hidden w-full max-w-7xl bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row h-[82vh]">
+            
+            <!-- Left Pane: Question Area -->
+            <div class="flex-grow flex flex-col p-6 border-r border-slate-200 overflow-y-auto">
+                <div class="flex justify-between items-center pb-4 border-b border-slate-200 mb-4">
+                    <div>
+                        <span id="questionTypeBadge" class="bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">Statement Based</span>
+                        <span class="text-sm font-bold text-slate-500 ml-2">Question <span id="currentQNum">1</span> of 90</span>
+                    </div>
+                    <div class="text-xs text-slate-500">Marks: <span class="text-emerald-600 font-bold">+4</span> | <span class="text-red-600 font-bold">-1</span></div>
+                </div>
+
+                <!-- Question Text -->
+                <div id="questionContainer" class="mb-6">
+                    <p id="questionText" class="text-lg font-medium text-slate-900 leading-relaxed mb-6"></p>
+                    
+                    <!-- Options List -->
+                    <div id="optionsContainer" class="space-y-3">
+                        <!-- Options injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- Action Footer Buttons -->
+                <div class="mt-auto pt-4 border-t border-slate-200 flex flex-wrap justify-between items-center gap-3">
+                    <div class="space-x-2">
+                        <button id="markReviewBtn" class="px-4 py-2 bg-purple-100 text-purple-700 font-medium rounded-lg hover:bg-purple-200 transition text-sm">
+                            <i class="fa-solid fa-bookmark mr-1"></i> Mark for Review & Next
+                        </button>
+                        <button id="clearResponseBtn" class="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition text-sm">
+                            Clear Response
+                        </button>
+                    </div>
+                    <div class="space-x-2">
+                        <button id="prevBtn" class="px-5 py-2 bg-slate-800 text-white font-medium rounded-lg hover:bg-slate-700 transition text-sm">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Previous
+                        </button>
+                        <button id="nextBtn" class="px-6 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition text-sm font-semibold">
+                            Save & Next <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Pane: Question Palette & Status -->
+            <div class="w-full lg:w-80 bg-slate-50 p-5 flex flex-col shrink-0">
+                <h3 class="font-bold text-slate-900 mb-3 text-sm flex items-center justify-between">
+                    <span>Question Palette</span>
+                    <i class="fa-solid fa-grid-2 text-slate-400"></i>
+                </h3>
+
+                <!-- Status Summary Legend -->
+                <div class="grid grid-cols-2 gap-2 text-xs mb-4 pb-3 border-b border-slate-200">
+                    <div class="flex items-center space-x-1.5"><div class="w-3 h-3 rounded-full bg-emerald-500"></div><span class="text-slate-600">Answered (<span id="countAnswered">0</span>)</span></div>
+                    <div class="flex items-center space-x-1.5"><div class="w-3 h-3 rounded-full bg-red-500"></div><span class="text-slate-600">Not Answered (<span id="countNotAnswered">0</span>)</span></div>
+                    <div class="flex items-center space-x-1.5"><div class="w-3 h-3 rounded-full bg-slate-300"></div><span class="text-slate-600">Not Visited (<span id="countNotVisited">90</span>)</span></div>
+                    <div class="flex items-center space-x-1.5"><div class="w-3 h-3 rounded-full bg-purple-500"></div><span class="text-slate-600">Marked (<span id="countMarked">0</span>)</span></div>
+                </div>
+
+                <!-- Colorful Dots Palette Grid -->
+                <div id="paletteGrid" class="grid grid-cols-5 gap-2 overflow-y-auto max-h-96 pr-1 mb-4">
+                    <!-- Palette buttons injected dynamically -->
+                </div>
+
+                <!-- Submit Exam Button -->
+                <button id="submitExamTriggerBtn" class="mt-auto w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700 transition shadow-md text-sm flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Submit Examination</span>
+                </button>
+            </div>
+
+        </section>
+
+        <!-- 4. RESULT & FEEDBACK REPORT SCREEN -->
+        <section id="resultScreen" class="hidden w-full max-w-5xl bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
+            <div id="printableReport" class="space-y-8">
+                <!-- Report Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-6 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Performance Feedback Report</h2>
+                        <p class="text-sm text-slate-500">Soumendra Sir' s Biology Classes | NEET XI Exam Series 8 Set A</p>
+                    </div>
+                    <div class="bg-slate-900 text-white px-6 py-3 rounded-xl text-right">
+                        <p class="text-xs text-slate-400">Candidate Name</p>
+                        <p id="reportCandidateName" class="font-bold text-lg text-amber-400"></p>
+                    </div>
+                </div>
+
+                <!-- Score Cards Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                        <p class="text-xs text-slate-500">Total Score</p>
+                        <p id="reportTotalScore" class="text-3xl font-extrabold text-slate-900 mt-1">0 / 360</p>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-center">
+                        <p class="text-xs text-emerald-700">Correct Answers</p>
+                        <p id="reportCorrectCount" class="text-3xl font-extrabold text-emerald-600 mt-1">0</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-200 text-center">
+                        <p class="text-xs text-red-700">Incorrect Answers</p>
+                        <p id="reportIncorrectCount" class="text-3xl font-extrabold text-red-600 mt-1">0</p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 text-center">
+                        <p class="text-xs text-amber-700">Accuracy Rate</p>
+                        <p id="reportAccuracy" class="text-3xl font-extrabold text-amber-600 mt-1">0%</p>
+                    </div>
+                </div>
+
+                <!-- Graphical Representation Chart -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-4 text-base">Topic-Wise Performance Analysis</h3>
+                    <div class="w-full h-64 flex items-center justify-center">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Weak Areas & Recommendations -->
+                <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl">
+                    <h3 class="font-bold text-red-800 text-base mb-2">Areas Requiring Focus & Revision</h3>
+                    <ul id="weakAreasList" class="list-disc pl-5 space-y-1 text-sm text-red-700">
+                        <!-- Weak areas dynamically populated -->
+                    </ul>
+                </div>
+
+                <!-- Detailed Answer Keys & Explanations -->
+                <div>
+                    <h3 class="font-bold text-slate-900 text-lg mb-4">Complete Answer Keys & Explanations</h3>
+                    <div id="answerKeysContainer" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                        <!-- Answer keys injected dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post-Exam Actions -->
+            <div class="mt-8 pt-6 border-t border-slate-200 flex flex-wrap justify-between items-center gap-4">
+                <button id="downloadReportBtn" class="bg-slate-900 text-white px-6 py-3 rounded-xl font-semibold hover:bg-slate-800 transition shadow-md flex items-center space-x-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Report Card</span>
+                </button>
+                <button id="sendWhatsAppBtn" class="bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition shadow-md flex items-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Send Score to WhatsApp (8910587106)</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-3 text-center text-xs mt-auto">
+        <p>&copy; 2026 Soumendra Sir' s Biology Classes. All rights reserved. Secure Proctored CBT Platform.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- PROCTORING & SECURITY ENFORCEMENT ---
+        let cheatAttempts = 0;
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => { e.preventDefault(); alert("Copying is disabled during examination!"); });
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('paste', e => e.preventDefault());
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && examActive) {
+                cheatAttempts++;
+                alert(`Warning ${cheatAttempts}: Tab switching or minimizing window is prohibited during examination!`);
+                if (cheatAttempts >= 3) {
+                    alert("Maximum tab switching limit exceeded. Submitting examination automatically.");
+                    submitExam();
+                }
+            }
+        });
+
+        // --- APPLICATION STATE ---
+        let userName = "";
+        let currentQuestionIndex = 0;
+        let examActive = false;
+        let timerInterval = null;
+        let timeLeft = 3600; // 1 Hour in seconds
+
+        // 90 Questions Database on "Respiration in Plants"
+        // Categories: 20 Statement, 20 Assertion-Reason, 20 Case Study, 25 Critical Thinking, 5 Diagram-based
+        const rawQuestions = [
+            // Statement Based (20 questions)
+            {
+                id: 1, type: "Statement Based",
+                topic: "Cellular Respiration & Glycolysis",
+                question: "Consider the following statements regarding glycolysis:<br>I. Glycolysis occurs in the cytoplasm of the cell and is present in all anaerobic organisms.<br>II. ATP is utilized at two steps in glycolysis.<br>III. Net gain of ATP from one glucose molecule during glycolysis is 4 molecules.<br>Which of the above statements are correct?",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 0,
+                explanation: "Glycolysis occurs in cytoplasm and is anaerobic. ATP is utilized in phosphorylation of glucose (to glucose-6-phosphate) and fructose-6-phosphate (to fructose-1,6-bisphosphate). Gross ATP produced is 4, but 2 are consumed, making net ATP gain 2."
+            },
+            {
+                id: 2, type: "Statement Based",
+                topic: "Fermentation",
+                question: "Read the statements about anaerobic respiration (fermentation):<br>I. Yeast poisons themselves to death when alcohol concentration reaches 13%.<br>II. Lactic acid fermentation occurs in skeletal muscle during intense exercise.<br>III. Both alcoholic and lactic acid fermentation release substantial net ATP.<br>Choose the correct option:",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 0,
+                explanation: "Fermentation yields only a very small amount of ATP (2 ATP from glucose). Statement III is incorrect because fermentation releases very little energy."
+            },
+            {
+                id: 3, type: "Statement Based",
+                topic: "TCA Cycle",
+                question: "Consider the statements on Tricarboxylic Acid (TCA) cycle:<br>I. TCA cycle takes place in the matrix of mitochondria.<br>II. The first product of the TCA cycle is citric acid.<br>III. Acetyl-CoA is a 3-carbon compound entering the cycle.<br>Which statements are correct?",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 0,
+                explanation: "Acetyl-CoA is a 2-carbon compound, not 3-carbon. It condenses with oxaloacetic acid (4C) to form citric acid (6C)."
+            },
+            {
+                id: 4, type: "Statement Based",
+                topic: "Electron Transport System",
+                question: "Regarding the Electron Transport System (ETS):<br>I. ETS is located on the inner mitochondrial membrane.<br>II. Oxygen acts as the ultimate acceptor of electrons.<br>III. Cytochrome c is a small protein attached to the outer surface of the inner membrane.<br>Identify the correct statements:",
+                options: ["I and II only", "II and III only", "I, II and III", "I and III only"],
+                correct: 2,
+                explanation: "All three statements regarding ETS location, cytochrome c, and oxygen as ultimate electron acceptor are correct."
+            },
+            {
+                id: 5, type: "Statement Based",
+                topic: "Respiratory Quotient",
+                question: "Consider statements on Respiratory Quotient (RQ):<br>I. RQ is the ratio of the volume of CO<sub>2</sub> evolved to the volume of O<sub>2</sub> consumed.<br>II. RQ for carbohydrates is 1.<br>III. RQ for organic acids is typically less than 1.<br>Which statements are correct?",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 0,
+                explanation: "RQ for organic acids (like malic acid, oxalic acid) is greater than 1 (>1), because they are oxygen-rich. Thus statement III is incorrect."
+            },
+            {
+                id: 6, type: "Statement Based",
+                topic: "Amphibolic Pathways",
+                question: "Regarding amphibolic pathways:<br>I. Respiration is solely a catabolic process.<br>II. Fatty acids break down to acetyl-CoA before entering the respiratory pathway.<br>III. Glycerol enters glycolysis by conversion to PGAL.<br>Identify correct statements:",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 1,
+                explanation: "Respiration is amphibolic, serving as both catabolic (breakdown) and anabolic (biosynthesis of fatty acids, amino acids from intermediates). Statement I is incorrect."
+            },
+            {
+                id: 7, type: "Statement Based",
+                topic: "Exchange of Gases",
+                question: "Statements about plant respiration exchange:<br>I. Plants require O<sub>2</sub> for respiration and release CO<sub>2</sub>.<br>II. Stomata and lenticels are sites for gas exchange.<br>III. Unlike animals, plants have specialized respiratory organs.<br>Choose correct options:",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 0,
+                explanation: "Plants lack specialized respiratory organs; gas exchange occurs through stomata and lenticels by diffusion. Statement III is false."
+            },
+            {
+                id: 8, type: "Statement Based",
+                topic: "Energy Relations",
+                question: "Consider energy calculation statements:<br>I. Complete oxidation of one glucose yields 36 to 38 ATP molecules depending on shuttle systems.<br>II. Substrate-level phosphorylation yields 4 ATP directly during aerobic respiration of 1 glucose.<br>III. NADH oxidation via malate-aspartate shuttle yields 3 ATP each.<br>Which are correct?",
+                options: ["I and II only", "II and III only", "I, II and III", "I and III only"],
+                correct: 2,
+                explanation: "All three energy relation statements are correct in classical plant respiration biochemistry."
+            },
+            {
+                id: 9, type: "Statement Based",
+                topic: "Glycolysis",
+                question: "Statements regarding steps of glycolysis:<br>I. Conversion of 1,3-bisphosphoglycerate to 3-phosphoglycerate yields ATP.<br>II. Hexokinase catalyzes the reversible phosphorylation of glucose.<br>III. Fructose-6-phosphate is converted to fructose-1,6-bisphosphate by phosphofructokinase.<br>Correct statements are:",
+                options: ["I and III only", "I and II only", "II and III only", "I, II and III"],
+                correct: 0,
+                explanation: "Hexokinase reaction in glycolysis is essentially irreversible under cellular conditions."
+            },
+            {
+                id: 10, type: "Statement Based",
+                topic: "TCA Cycle",
+                question: "Statements on TCA enzymes and cofactors:<br>I. Succinate dehydrogenase is bound to the inner mitochondrial membrane.<br>II. NAD<sup>+</sup> is reduced to NADH + H<sup>+</sup> at three points in the TCA cycle.<br>III. FAD is reduced to FADH<sub>2</sub> during conversion of succinate to malate.<br>Which are correct?",
+                options: ["I and II only", "II and III only", "I, II and III", "I and III only"],
+                correct: 2,
+                explanation: "All statements regarding succinate dehydrogenase (Complex II) and cofactor reductions are accurate."
+            },
+            {
+                id: 11, type: "Statement Based",
+                topic: "Respiratory Quotient",
+                question: "Consider RQ statements:<br>I. RQ of tripalmitin fat is approximately 0.7.<br>II. RQ of proteins is around 0.9.<br>III. Under anaerobic conditions, RQ is infinity (&infin;).<br>Identify correct statements:",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 3,
+                explanation: "All given RQ values and anaerobic RQ condition (CO2 evolved without O2 consumed) are correct."
+            },
+            {
+                id: 12, type: "Statement Based",
+                topic: "ETS Complexes",
+                question: "Statements on ETS complexes:<br>I. Complex I is NADH dehydrogenase.<br>II. Complex IV is Cytochrome c oxidase containing Cu centers.<br>III. ATP synthase is designated as Complex V.<br>Which are correct?",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 3,
+                explanation: "All enzyme complex designations in mitochondrial ETS are correct."
+            },
+            {
+                id: 13, type: "Statement Based",
+                topic: "Cellular Respiration",
+                question: "Consider statements on cellular respiration:<br>I. Glycolysis is common to both aerobic and anaerobic respiration.<br>II. Pyruvate undergoes oxidative decarboxylation in mitochondrial matrix.<br>III. Pyruvate dehydrogenase requires Mg<sup>2+</sup> and thiamine pyrophosphate.<br>Choose correct option:",
+                options: ["I and II only", "II and III only", "I, II and III", "I and III only"],
+                correct: 2,
+                explanation: "All statements regarding glycolysis universality, pyruvate decarboxylation, and cofactors are true."
+            },
+            {
+                id: 14, type: "Statement Based",
+                topic: "Fermentation",
+                question: "Statements on fermentation enzymes:<br>I. Pyruvate decarboxylase is involved in alcoholic fermentation.<br>II. Lactate dehydrogenase is involved in lactic acid fermentation.<br>III. Both enzymes require oxygen as a cofactor.<br>Identify correct statements:",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 0,
+                explanation: "Fermentation occurs strictly in the absence of oxygen; oxygen is not required as a cofactor."
+            },
+            {
+                id: 15, type: "Statement Based",
+                topic: "Amphibolic Pathways",
+                question: "Statements on respiratory intermediates:<br>I. Acetyl-CoA is used for synthesis of fatty acids and carotenoids.<br>II. &alpha;-ketoglutaric acid is a precursor for amino acid synthesis.<br>III. Oxaloacetate can be converted to phosphoenolpyruvate during gluconeogenesis.<br>Which are correct?",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 3,
+                explanation: "All statements accurately describe the amphibolic nature of the respiratory pathway."
+            },
+            {
+                id: 16, type: "Statement Based",
+                topic: "Energy Relations",
+                question: "Statements on ATP synthesis mechanisms:<br>I. Chemiosmotic hypothesis explains ATP synthesis in respiration and photosynthesis.<br>II. Proton gradient across inner mitochondrial membrane drives ATP synthase.<br>III. Movement of 2 protons through F0-F1 particle produces 1 ATP.<br>Which are correct?",
+                options: ["I and II only", "II and III only", "I, II and III", "I and III only"],
+                correct: 0,
+                explanation: "Oxidation of 1 NADH yields 3 ATP via 10 protons pumped across membranes (approx 3-4 protons per ATP). Statement III is imprecise or varies by convention (usually ~4 protons per ATP)."
+            },
+            {
+                id: 17, type: "Statement Based",
+                topic: "Exchange of Gases",
+                question: "Consider plant respiration gas exchange:<br>I. Rate of respiration is generally lower than rate of photosynthesis in green tissues in light.<br>II. Lenticels remain open continuously unlike stomata which can close.<br>III. Root respiration depends on oxygen dissolved in soil water spaces.<br>Correct statements:",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 3,
+                explanation: "All statements concerning gas exchange dynamics in plant organs are correct."
+            },
+            {
+                id: 18, type: "Statement Based",
+                topic: "Glycolysis",
+                question: "Statements on preparatory phase of glycolysis:<br>I. Glucose is converted to glucose-6-phosphate by hexokinase.<br>II. Isomerization of glucose-6-phosphate yields fructose-6-phosphate.<br>III. Splitting of fructose-1,6-bisphosphate yields two 3-carbon isomers.<br>Which are correct?",
+                options: ["I and II only", "II and III only", "I and III only", "I, II and III"],
+                correct: 3,
+                explanation: "All steps correctly outline the preparatory phase of glycolysis."
+            },
+            {
+                id: 19, type: "Statement Based",
+                topic: "TCA Cycle",
+                question: "Consider TCA cycle regulation:<br>I. High ATP/ADP ratio inhibits citrate synthase and isocitrate dehydrogenase.<br>II. Calcium ions activate certain enzymes of TCA cycle.<br>III. TCA cycle is inhibited by high concentrations of NADH.<br>Which statements are correct?",
+                options: ["I and II only", "II and III only", "I, II and III", "I and III only"],
+                correct: 2,
+                explanation: "All listed feedback regulatory mechanisms operate on the citric acid cycle."
+            },
+            {
+                id: 20, type: "Statement Based",
+                topic: "Respiratory Quotient",
+                question: "Statements on RQ variations:<br>I. Succulent plants like Opuntia show RQ of zero at night due to incomplete dark acidification.<br>II. Germinating fatty seeds show RQ > 1.<br>III. Carbohydrates always show RQ = 1.<br>Which are correct?",
+                options: ["I and III only", "II and III only", "I and II only", "I, II and III"],
+                correct: 0,
+                explanation: "Succulent plants absorb CO2 at night without releasing O2 (CAM metabolism), resulting in RQ = 0. Fatty seeds show RQ < 0.7 (not >1). Statement III is correct."
+            },
+
+            // Assertion and Reasoning Based (21-40)
+            {
+                id: 21, type: "Assertion & Reason",
+                topic: "Glycolysis",
+                question: "<strong>Assertion (A):</strong> Glycolysis is the first stage of cellular respiration in all organisms.<br><strong>Reason (R):</strong> It takes place in the cytoplasm and does not require oxygen.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect but (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Glycolysis is universal (first stage) precisely because it occurs in cytoplasm and is oxygen-independent."
+            },
+            {
+                id: 22, type: "Assertion & Reason",
+                topic: "TCA Cycle",
+                question: "<strong>Assertion (A):</strong> TCA cycle is considered an aerobic pathway even though O<sub>2</sub> is not directly consumed in it.<br><strong>Reason (R):</strong> The NADH and FADH<sub>2</sub> produced in TCA cycle must be oxidized via the electron transport system which requires O<sub>2</sub>.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect but (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Without oxygen in ETS, NADH/FADH2 cannot be recycled, halting the TCA cycle due to lack of oxidized cofactors (NAD+, FAD)."
+            },
+            {
+                id: 23, type: "Assertion & Reason",
+                topic: "Fermentation",
+                question: "<strong>Assertion (A):</strong> Fermentation yields a very low amount of energy compared to aerobic respiration.<br><strong>Reason (R):</strong> Glucose is incompletely oxidized in fermentation.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "Both (A) and (R) are incorrect."
+                ],
+                correct: 0,
+                explanation: "Incomplete oxidation of glucose in fermentation releases less than 7% of the energy in glucose, trapping only 2 ATP."
+            },
+            {
+                id: 24, type: "Assertion & Reason",
+                topic: "Respiratory Quotient",
+                question: "<strong>Assertion (A):</strong> The respiratory quotient for tripalmitin is 0.7.<br><strong>Reason (R):</strong> Fats are deficient in oxygen relative to carbon and require more oxygen for complete oxidation.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Because fats have low O content, oxygen consumption is high, making RQ = 102 CO2 / 145 O2 = 0.7."
+            },
+            {
+                id: 25, type: "Assertion & Reason",
+                topic: "Amphibolic Pathways",
+                question: "<strong>Assertion (A):</strong> Respiratory pathway is an amphibolic pathway.<br><strong>Reason (R):</strong> It is involved in both breakdown (catabolism) and synthesis (anabolism) of biomolecules.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "Both (A) and (R) are incorrect."
+                ],
+                correct: 0,
+                explanation: "Amphibolic means both catabolic and anabolic. Intermediates like acetyl-CoA and alpha-ketoglutarate are withdrawn for anabolism."
+            },
+            {
+                id: 26, type: "Assertion & Reason",
+                topic: "Electron Transport System",
+                question: "<strong>Assertion (A):</strong> Cytochrome c is a mobile electron carrier in the inner mitochondrial membrane.<br><strong>Reason (R):</strong> It transfers electrons between Complex III (cytochrome bc1 complex) and Complex IV (cytochrome c oxidase).<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect but (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Cytochrome c is a peripheral protein attached to the outer surface of the inner membrane acting as a shuttle between Complex III and IV."
+            },
+            {
+                id: 27, type: "Assertion & Reason",
+                topic: "Oxidative Phosphorylation",
+                question: "<strong>Assertion (A):</strong> ATP synthesis in mitochondria is termed oxidative phosphorylation.<br><strong>Reason (R):</strong> Energy derived from oxidation-reduction reactions in ETS is used to phosphorylate ADP to ATP.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Oxidation of coenzymes drives proton pumping, creating a proton gradient that powers ATP synthase (phosphorylation)."
+            },
+            {
+                id: 28, type: "Assertion & Reason",
+                topic: "Gas Exchange",
+                question: "<strong>Assertion (A):</strong> Plants do not have specialized respiratory organs.<br><strong>Reason (R):</strong> Each plant part takes care of its own gas exchange needs by diffusion.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "Both (A) and (R) are incorrect."
+                ],
+                correct: 0,
+                explanation: "Diffusion in plants is sufficient because gas transport requirement is low and living cells are fairly close to the surface."
+            },
+            {
+                id: 29, type: "Assertion & Reason",
+                topic: "Glycolysis",
+                question: "<strong>Assertion (A):</strong> The second half of glycolysis is termed the pay-off phase.<br><strong>Reason (R):</strong> ATP is synthesized in this phase from high-energy intermediates.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect but (R) is correct."
+                ],
+                correct: 0,
+                explanation: "In the pay-off phase, ATP and NADH are generated, resulting in a net positive energy yield."
+            },
+            {
+                id: 30, type: "Assertion & Reason",
+                topic: "TCA Cycle",
+                question: "<strong>Assertion (A):</strong> The entry of pyruvate into mitochondria leads to formation of Acetyl-CoA.<br><strong>Reason (R):</strong> This reaction is catalyzed by pyruvate dehydrogenase complex in the presence of oxygen and NAD<sup>+</sup>.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Oxidative decarboxylation of pyruvate links glycolysis with the TCA cycle."
+            },
+            {
+                id: 31, type: "Assertion & Reason",
+                topic: "Fermentation",
+                question: "<strong>Assertion (A):</strong> Alcoholic fermentation produces carbon dioxide along with ethanol.<br><strong>Reason (R):</strong> Pyruvate is first decarboxylated to acetaldehyde before reduction by NADH.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect but (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Pyruvate decarboxylase releases CO2 yielding acetaldehyde, which alcohol dehydrogenase then reduces to ethanol."
+            },
+            {
+                id: 32, type: "Assertion & Reason",
+                topic: "Chemiosmosis",
+                question: "<strong>Assertion (A):</strong> Accumulation of protons in the intermembrane space creates a proton gradient.<br><strong>Reason (R):</strong> Protons are pumped from mitochondrial matrix to intermembrane space as electrons move through ETS complexes I, III, and IV.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "Both (A) and (R) are incorrect."
+                ],
+                correct: 0,
+                explanation: "Proton translocation across inner membrane powers ATP synthase via chemiosmosis."
+            },
+            {
+                id: 33, type: "Assertion & Reason",
+                topic: "Respiratory Quotient",
+                question: "<strong>Assertion (A):</strong> RQ of proteins is less than 1 (approx 0.9).<br><strong>Reason (R):</strong> Proteins contain nitrogen and lesser oxygen relative to carbon compared to carbohydrates.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "When proteins are respired as substrates, RQ is typically around 0.9 due to their chemical composition."
+            },
+            {
+                id: 34, type: "Assertion & Reason",
+                topic: "Amphibolic Pathways",
+                question: "<strong>Assertion (A):</strong> When fats are respired, they do not enter glycolysis at the glucose level.<br><strong>Reason (R):</strong> Fatty acids are broken down into acetyl-CoA and enter the TCA cycle directly.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Beta-oxidation of fatty acids yields acetyl-CoA, which enters the Krebs cycle."
+            },
+            {
+                id: 35, type: "Assertion & Reason",
+                topic: "Glycolysis",
+                question: "<strong>Assertion (A):</strong> Phosphofructokinase (PFK) is considered the pacemaker enzyme of glycolysis.<br><strong>Reason (R):</strong> It catalyzes the rate-limiting committed step of glycolysis and is allosterically regulated by ATP and AMP.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "Both (A) and (R) are incorrect."
+                ],
+                correct: 0,
+                explanation: "PFK activity controls glycolytic flux in response to cellular energy charge."
+            },
+            {
+                id: 36, type: "Assertion & Reason",
+                topic: "TCA Cycle",
+                question: "<strong>Assertion (A):</strong> Substrate-level phosphorylation occurs in the TCA cycle during conversion of succinyl-CoA to succinic acid.<br><strong>Reason (R):</strong> GTP is synthesized, which is subsequently converted to ATP.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "This is the only direct substrate-level phosphorylation step in the citric acid cycle."
+            },
+            {
+                id: 37, type: "Assertion & Reason",
+                topic: "ETS",
+                question: "<strong>Assertion (A):</strong> Ubiquinone (Coenzyme Q) is a lipid-soluble electron carrier.<br><strong>Reason (R):</strong> It can diffuse freely within the hydrophobic core of the inner mitochondrial membrane.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "Ubiquinone accepts electrons from Complex I and II and transfers them to Complex III."
+            },
+            {
+                id: 38, type: "Assertion & Reason",
+                topic: "Plant Respiration",
+                question: "<strong>Assertion (A):</strong> Root respiration can be severely inhibited in waterlogged soils.<br><strong>Reason (R):</strong> Waterlogging displaces oxygen from soil pores, leading to hypoxia or anoxia.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "Both (A) and (R) are incorrect."
+                ],
+                correct: 0,
+                explanation: "Lack of soil oxygen halts aerobic respiration in roots, causing accumulation of toxic metabolites and plant death."
+            },
+            {
+                id: 39, type: "Assertion & Reason",
+                topic: "Energy Relations",
+                question: "<strong>Assertion (A):</strong> Calculations of net ATP yield in aerobic respiration are theoretical.<br><strong>Reason (R):</strong> Intermediates are constantly withdrawn from respiratory pathways for other biosynthetic pathways.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "Both (A) and (R) are incorrect."
+                ],
+                correct: 0,
+                explanation: "The 36-38 ATP figure assumes ideal conditions and no intermediate withdrawal, which seldom occurs in living cells."
+            },
+            {
+                id: 40, type: "Assertion & Reason",
+                topic: "Respiratory Quotient",
+                question: "<strong>Assertion (A):</strong> Under anaerobic respiration, RQ value is infinity (&infin;).<br><strong>Reason (R):</strong> Carbon dioxide is evolved without any consumption of oxygen.<br>Choose the correct option:",
+                options: [
+                    "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
+                    "Both (A) and (R) are correct but (R) is not the correct explanation of (A).",
+                    "(A) is correct but (R) is incorrect.",
+                    "(A) is incorrect and (R) is correct."
+                ],
+                correct: 0,
+                explanation: "RQ = CO2 / O2. Since O2 consumed = 0, any finite number divided by zero approaches infinity (&infin;)."
+            },
+
+            // Case Study Based (41-60)
+            {
+                id: 41, type: "Case Study Based",
+                topic: "Case Study: Seed Germination",
+                question: "<strong>Case Study:</strong> A student places 50 germinating pea seeds in a respirometer setup containing KOH to absorb carbon dioxide. Over 2 hours, the volume of gas in the tube decreases.<br><strong>Question:</strong> What is the primary reason for the decrease in gas volume in the respirometer?",
+                options: [
+                    "Absorption of evolved CO<sub>2</sub> by KOH coupled with O<sub>2</sub> consumption by seeds",
+                    "Production of ethanol during anaerobic fermentation",
+                    "Absorption of nitrogen gas by seeds",
+                    "Evaporation of water from seeds"
+                ],
+                correct: 0,
+                explanation: "Germinating seeds consume O2 for aerobic respiration. The CO2 produced is absorbed by KOH, causing a net decrease in gas volume."
+            },
+            {
+                id: 42, type: "Case Study Based",
+                topic: "Case Study: Seed Germination",
+                question: "In the above experiment with germinating pea seeds (using starchy seeds), what would be the expected Respiratory Quotient (RQ)?",
+                options: ["1.0", "0.7", "1.3", "Infinite"],
+                correct: 0,
+                explanation: "Pea seeds are rich in carbohydrates (starch), so their RQ equals 1.0."
+            },
+            {
+                id: 43, type: "Case Study Based",
+                topic: "Case Study: Baker's Yeast",
+                question: "<strong>Case Study:</strong> A commercial bakery uses yeast (Saccharomyces cerevisiae) to raise bread dough. The dough is kept in warm anaerobic conditions.<br><strong>Question:</strong> Which metabolic end products are responsible for the spongy texture and rising of the dough?",
+                options: [
+                    "Carbon dioxide gas bubbles trapped in the gluten network and ethanol",
+                    "Lactic acid and water",
+                    "Oxygen gas and ATP",
+                    "Citric acid and hydrogen"
+                ],
+                correct: 0,
+                explanation: "Alcoholic fermentation produces CO2 gas which forms bubbles in the dough, causing it to rise."
+            },
+            {
+                id: 44, type: "Case Study Based",
+                topic: "Case Study: Baker's Yeast",
+                question: "What happens to the alcohol produced during this baking process?",
+                options: [
+                    "It evaporates during baking in the oven.",
+                    "It is retained in high concentration in the baked bread.",
+                    "It is converted back to glucose.",
+                    "It is converted to lactic acid."
+                ],
+                correct: 0,
+                explanation: "Ethanol evaporates entirely during the high-temperature baking process."
+            },
+            {
+                id: 45, type: "Case Study Based",
+                topic: "Case Study: Muscle Fatigue",
+                question: "<strong>Case Study:</strong> An athlete undergoes a 100m sprint. Due to high energy demand and temporary oxygen deficit in skeletal muscles, cells shift metabolism.<br><strong>Question:</strong> Which pathway becomes active in muscle cells under this condition?",
+                options: [
+                    "Lactic acid fermentation",
+                    "Alcoholic fermentation",
+                    "TCA cycle exclusively",
+                    "Photosynthetic phosphorylation"
+                ],
+                correct: 0,
+                explanation: "Under oxygen deficit, pyruvate is reduced to lactic acid by lactate dehydrogenase."
+            },
+            {
+                id: 46, type: "Case Study Based",
+                topic: "Case Study: Muscle Fatigue",
+                question: "Accumulation of which substance causes muscle soreness and fatigue after intense exercise?",
+                options: ["Lactic acid", "Pyruvic acid", "Ethanol", "Carbon dioxide"],
+                correct: 0,
+                explanation: "Lactic acid buildup lowers cellular pH and causes muscle fatigue."
+            },
+            {
+                id: 47, type: "Case Study Based",
+                topic: "Case Study: Plant Mitochondria",
+                question: "<strong>Case Study:</strong> Researchers isolate intact mitochondria from plant hypocotyls and supply them with pyruvate and malate in a buffer containing inorganic phosphate and ADP.<br><strong>Question:</strong> What observation confirms coupled oxidative phosphorylation?",
+                options: [
+                    "Oxygen consumption and ATP synthesis occur simultaneously.",
+                    "Glucose is synthesized in large amounts.",
+                    "Carbon dioxide stops evolving.",
+                    "pH of the matrix decreases drastically."
+                ],
+                correct: 0,
+                explanation: "Coupled mitochondria consume O2 and phosphorylate ADP to ATP when respiratory substrates are provided."
+            },
+            {
+                id: 48, type: "Case Study Based",
+                topic: "Case Study: Plant Mitochondria",
+                question: "If cyanide (CN<sup>-</sup>) is added to this mitochondrial suspension, what immediate effect is expected?",
+                options: [
+                    "Inhibition of Complex IV, halting O<sub>2</sub> consumption and ATP synthesis",
+                    "Uncontrolled surge in ATP production",
+                    "Reversal of glycolysis",
+                    "Stimulation of alcoholic fermentation"
+                ],
+                correct: 0,
+                explanation: "Cyanide binds to cytochrome c oxidase (Complex IV), blocking electron flow to oxygen."
+            },
+            {
+                id: 49, type: "Case Study Based",
+                topic: "Case Study: Oil Seeds Germination",
+                question: "<strong>Case Study:</strong> A student measures the RQ of germinating castor bean seeds (oil seeds) over 5 days.<br><strong>Question:</strong> What RQ value is typically recorded during the early stages of castor seed germination?",
+                options: ["Less than 1 (approx 0.7)", "Exactly 1.0", "Greater than 1.5", "Zero"],
+                correct: 0,
+                explanation: "Castor seeds are rich in fatty acids (lipids), yielding an RQ around 0.7."
+            },
+            {
+                id: 50, type: "Case Study Based",
+                topic: "Case Study: Oil Seeds Germination",
+                question: "Why do oil seeds initially exhibit a lower RQ compared to starchy seeds?",
+                options: [
+                    "Fats require more oxygen for complete oxidation due to lower oxygen-to-carbon ratio.",
+                    "Fats do not undergo respiration.",
+                    "Fats produce large amounts of carbon dioxide without oxygen consumption.",
+                    "Fats are converted directly to ethanol."
+                ],
+                correct: 0,
+                explanation: "Low oxygen content in fats means more O2 molecules must be consumed per CO2 produced."
+            },
+            {
+                id: 51, type: "Case Study Based",
+                topic: "Case Study: Cyanide-Resistant Respiration",
+                question: "<strong>Case Study:</strong> Arum lily spadix exhibits a special alternative oxidase pathway that is resistant to cyanide and produces heat (thermogenesis) to volatilize odor compounds.<br><strong>Question:</strong> How does the alternative oxidase bypass standard ETS?",
+                options: [
+                    "It passes electrons directly from ubiquinone to oxygen without pumping protons through Complex III and IV.",
+                    "It converts glucose directly to ethanol.",
+                    "It utilizes solar energy instead of chemical energy.",
+                    "It halts the TCA cycle permanently."
+                ],
+                correct: 0,
+                explanation: "Alternative oxidase branches at ubiquinone and reduces O2 directly, releasing energy as heat instead of ATP."
+            },
+            {
+                id: 52, type: "Case Study Based",
+                topic: "Case Study: Cyanide-Resistant Respiration",
+                question: "What is the consequence of this alternative pathway on ATP yield?",
+                options: [
+                    "ATP yield per glucose molecule is significantly reduced.",
+                    "ATP yield increases threefold.",
+                    "ATP yield remains completely unaffected.",
+                    "No ATP is produced in glycolysis either."
+                ],
+                correct: 0,
+                explanation: "Because proton pumping across complexes III and IV is bypassed, less ATP is synthesized."
+            },
+            {
+                id: 53, type: "Case Study Based",
+                topic: "Case Study: Flooded Crop Fields",
+                question: "<strong>Case Study:</strong> Rice paddy fields are submerged in water during early growth stages. Rice seedlings survive whereas most weed seedlings die.<br><strong>Question:</strong> How do rice seedlings tolerate submergence and oxygen depletion?",
+                options: [
+                    "They possess high alcohol dehydrogenase activity and capacity for anaerobic fermentation.",
+                    "They perform photosynthesis underwater at night.",
+                    "They absorb oxygen directly from soil mud.",
+                    "They cease all metabolic activity completely."
+                ],
+                correct: 0,
+                explanation: "Flood-tolerant rice varieties adapt through enhanced anaerobic fermentation enzymes and elongation responses."
+            },
+            {
+                id: 54, type: "Case Study Based",
+                topic: "Case Study: Flooded Crop Fields",
+                question: "What toxic byproduct of anaerobic respiration must flood-tolerant plants manage to prevent cellular toxicity?",
+                options: ["Ethanol and acetaldehyde accumulation", "Citric acid accumulation", "Oxygen free radicals", "Phosphoric acid"],
+                correct: 0,
+                explanation: "Ethanol toxicity is managed by exporting or metabolizing it efficiently."
+            },
+            {
+                id: 55, type: "Case Study Based",
+                topic: "Case Study: Respiratory Inhibitors",
+                question: "<strong>Case Study:</strong> Rotenone is added to isolated plant mitochondria. It specifically inhibits Complex I of the electron transport system.<br><strong>Question:</strong> Which of the following substrates' oxidation would be most directly affected by rotenone?",
+                options: ["NADH-linked substrates (like malate/pyruvate)", "FADH2-linked substrates (like succinate)", "Ascorbate acting on Complex IV", "ATP directly"],
+                correct: 0,
+                explanation: "Complex I accepts electrons from NADH. Succinate feeds into Complex II via FADH2, bypassing Complex I."
+            },
+            {
+                id: 56, type: "Case Study Based",
+                topic: "Case Study: Respiratory Inhibitors",
+                question: "If succinate is added to rotenone-poisoned mitochondria, will oxygen consumption resume?",
+                options: ["Yes, via Complex II and ubiquinone", "No, total respiration stops completely", "Only if glucose is added", "Only in the presence of light"],
+                correct: 0,
+                explanation: "Succinate enters via Complex II, bypassing the rotenone block at Complex I."
+            },
+            {
+                id: 57, type: "Case Study Based",
+                topic: "Case Study: Malate Valve in Plants",
+                question: "<strong>Case Study:</strong> Plant mitochondria contain external and internal NAD(P)H dehydrogenases that oxidize cytosolic NADH directly without crossing the inner membrane.<br><strong>Question:</strong> What is the physiological significance of these alternative plant mitochondrial dehydrogenases?",
+                options: [
+                    "They bypass the strict shuttle requirement for cytosolic NADH oxidation.",
+                    "They produce glucose in mitochondria.",
+                    "They prevent TCA cycle from operating.",
+                    "They absorb light energy."
+                ],
+                correct: 0,
+                explanation: "Plant mitochondria possess distinct bypass dehydrogenases allowing direct oxidation of cytosolic NADH."
+            },
+            {
+                id: 58, type: "Case Study Based",
+                topic: "Case Study: Malate Valve in Plants",
+                question: "Do these alternative plant dehydrogenases pump protons across the inner membrane?",
+                options: [
+                    "Some do not pump protons, reducing ATP yield per NADH oxidized.",
+                    "They pump double the number of protons.",
+                    "They synthesize ATP directly without ADP.",
+                    "They produce water instead of protons."
+                ],
+                correct: 0,
+                explanation: "Bypass enzymes do not contribute to proton translocation across all three sites, lowering ATP yield."
+            },
+            {
+                id: 59, type: "Case Study Based",
+                topic: "Case Study: Fruit Ripening Respiration",
+                question: "<strong>Case Study:</strong> During ripening of climacteric fruits like apples and bananas, there is a sudden sharp rise in respiration rate known as the respiratory climacteric.<br><strong>Question:</strong> What triggers this sudden surge in respiration?",
+                options: [
+                    "Autocatalytic burst of ethylene gas production",
+                    "Complete depletion of starch",
+                    "Freezing temperatures",
+                    "Lack of carbon dioxide"
+                ],
+                correct: 0,
+                explanation: "Ethylene triggers the climacteric rise in respiration associated with ripening."
+            },
+            {
+                id: 60, type: "Case Study Based",
+                topic: "Case Study: Fruit Ripening Respiration",
+                question: "What is the primary metabolic role of the climacteric respiratory surge?",
+                options: [
+                    "Providing energy and carbon skeletons for ripening-associated biochemical changes (sugar conversion, softening, aroma)",
+                    "Generating alcohol for preservation",
+                    "Freezing internal tissues",
+                    "Stopping all enzyme synthesis"
+                ],
+                correct: 0,
+                explanation: "High metabolic activity drives synthesis of ripening enzymes, pigments, and flavor compounds."
+            },
+
+            // Critical Thinking Based (61-85)
+            {
+                id: 61, type: "Critical Thinking",
+                topic: "Energy Relations",
+                question: "If a plant cell undergoes respiration of 1 molecule of sucrose (disaccharide), how many net ATP molecules are theoretically generated (assuming standard malate-aspartate shuttle)?",
+                options: ["72 to 76 ATP", "36 to 38 ATP", "18 to 20 ATP", "100 ATP"],
+                correct: 0,
+                explanation: "Sucrose hydrolyzes to glucose + fructose (two 6C hexoses), each yielding 36-38 ATP, totaling 72-76 ATP."
+            },
+            {
+                id: 62, type: "Critical Thinking",
+                topic: "Glycolysis Regulation",
+                question: "High concentrations of AMP in a plant cell stimulate phosphofructokinase (PFK). What does this physiological feedback indicate?",
+                options: [
+                    "Cellular energy charge is low, so glycolysis must be accelerated.",
+                    "Cellular energy charge is very high, so glycolysis must stop.",
+                    "Photosynthesis is operating at maximum capacity.",
+                    "Glucose is in excess supply."
+                ],
+                correct: 0,
+                explanation: "AMP signals low energy (high ADP/AMP relative to ATP), stimulating PFK to increase ATP production."
+            },
+            {
+                id: 63, type: "Critical Thinking",
+                topic: "RQ Calculation",
+                question: "Calculate the Respiratory Quotient (RQ) for the oxidation of malic acid, given its chemical formula as C<sub>4</sub>H<sub>6</sub>O<sub>5</sub>:<br>Reaction: C<sub>4</sub>H<sub>6</sub>O<sub>5</sub> + 3O<sub>2</sub> &rarr; 4CO<sub>2</sub> + 3H<sub>2</sub>O",
+                options: ["1.33", "1.0", "0.7", "0.5"],
+                correct: 0,
+                explanation: "RQ = Volume of CO2 evolved / Volume of O2 consumed = 4 / 3 = 1.33 (>1)."
+            },
+            {
+                id: 64, type: "Critical Thinking",
+                topic: "ETS Proton Stoichiometry",
+                question: "How many protons are translocated across the inner mitochondrial membrane into the intermembrane space per pair of electrons derived from NADH?",
+                options: ["10 protons", "6 protons", "4 protons", "12 protons"],
+                correct: 0,
+                explanation: "Complex I pumps 4, Complex III pumps 4, and Complex IV pumps 2, totaling 10 protons per NADH."
+            },
+            {
+                id: 65, type: "Critical Thinking",
+                topic: "Amphibolic Intermediates",
+                question: "When proteins are utilized as respiratory substrates during starvation, amino acids first undergo deamination. Into which intermediates can they enter the respiratory pathway?",
+                options: [
+                    "Pyruvate, Acetyl-CoA, or TCA cycle intermediates (&alpha;-ketoglutarate, oxaloacetate, succinyl-CoA)",
+                    "Glucose exclusively",
+                    "Ribulose-1,5-bisphosphate",
+                    "Glyceraldehyde-3-phosphate only"
+                ],
+                correct: 0,
+                explanation: "Deaminated amino acids feed directly into various central respiratory checkpoints."
+            },
+            {
+                id: 66, type: "Critical Thinking",
+                topic: "Pasteur Effect",
+                question: "The Pasteur effect refers to the dramatic decrease in the rate of glucose consumption when an anaerobic yeast culture is exposed to oxygen. Why does this occur?",
+                options: [
+                    "Aerobic respiration produces 18-19 times more ATP per glucose than fermentation, requiring fewer glucose molecules to meet cellular energy demand.",
+                    "Oxygen destroys glucose molecules directly.",
+                    "Glycolysis is completely inhibited by light in presence of oxygen.",
+                    "Yeast cells die immediately upon oxygen exposure."
+                ],
+                correct: 0,
+                explanation: "High ATP yield in aerobic respiration downregulates glycolysis (Pasteur effect)."
+            },
+            {
+                id: 67, type: "Critical Thinking",
+                topic: "ATP Synthase Structure",
+                question: "In the F<sub>0</sub>-F<sub>1</sub> ATP synthase particle, which component is responsible for rotational catalysis and synthesis of ATP from ADP and Pi?",
+                options: [
+                    "F<sub>1</sub> headpiece in the matrix",
+                    "F<sub>0</sub> transmembrane proton channel",
+                    "Cytochrome c",
+                    "Ubiquinone"
+                ],
+                correct: 0,
+                explanation: "The F1 catalytic sphere in the matrix synthesizes ATP powered by F0 proton translocation."
+            },
+            {
+                id: 68, type: "Critical Thinking",
+                topic: "Substrate Level Phosphorylation",
+                question: "Identify the total number of ATP (or GTP) molecules produced directly via substrate-level phosphorylation during the complete oxidation of 1 molecule of glucose to 6 CO<sub>2</sub> and 6 H<sub>2</sub>O.",
+                options: ["4 ATP/GTP (2 in glycolysis, 2 in TCA cycle)", "38 ATP", "36 ATP", "2 ATP"],
+                correct: 0,
+                explanation: "Glycolysis yields 2 net ATP (4 gross), and TCA cycle yields 2 GTP (which convert to ATP), totaling 4."
+            },
+            {
+                id: 69, type: "Critical Thinking",
+                topic: "Inhibitor Action",
+                question: "Dinitrophenol (DNP) is an uncoupler of oxidative phosphorylation. How does DNP affect mitochondrial function?",
+                options: [
+                    "It makes the inner mitochondrial membrane leaky to protons, collapsing the proton gradient and stopping ATP synthesis while oxygen consumption continues.",
+                    "It blocks Complex IV entirely.",
+                    "It prevents glycolysis in the cytoplasm.",
+                    "It converts ADP to glucose."
+                ],
+                correct: 0,
+                explanation: "Uncouplers abolish proton motive force, uncoupling electron transport from ATP synthesis."
+            },
+            {
+                id: 70, type: "Critical Thinking",
+                topic: "Anaplerotic Reactions",
+                question: "If intermediates of the TCA cycle are withdrawn for amino acid biosynthesis, how does the cell prevent the cycle from halting due to depletion of oxaloacetate?",
+                options: [
+                    "Anaplerotic reactions (like PEP carboxylase fixing CO<sub>2</sub> to form oxaloacetate) replenish TCA cycle intermediates.",
+                    "Glycolysis stops permanently.",
+                    "Fatty acids convert directly to proteins.",
+                    "Cell undergoes programmed cell death."
+                ],
+                correct: 0,
+                explanation: "Anaplerotic (filling-up) reactions replenish depleted Krebs cycle intermediates."
+            },
+            {
+                id: 71, type: "Critical Thinking",
+                topic: "Glycerol Phosphate Shuttle",
+                question: "In plant tissues utilizing the glycerol-phosphate shuttle instead of malate-aspartate shuttle for cytosolic NADH oxidation, what is the net ATP yield per glucose molecule?",
+                options: ["36 ATP", "38 ATP", "32 ATP", "40 ATP"],
+                correct: 0,
+                explanation: "Glycerol-phosphate shuttle yields 2 ATP per NADH instead of 3, reducing total net yield from 38 to 36."
+            },
+            {
+                id: 72, type: "Critical Thinking",
+                topic: "Respiratory Quotient Calculation",
+                question: "What is the RQ when oxalic acid ($C_2H_2O_4$) is oxidized?",
+                options: ["4.0", "1.0", "0.7", "Infinity"],
+                correct: 0,
+                explanation: "2C2H2O4 + O2 &rarr; 4CO2 + 2H2O. RQ = 4 CO2 / 1 O2 = 4.0."
+            },
+            {
+                id: 73, type: "Critical Thinking",
+                topic: "Mitochondrial DNA",
+                question: "Plant mitochondria contain their own circular DNA and 70S ribosomes. What essential components of the respiratory machinery are encoded by mitochondrial DNA?",
+                options: [
+                    "Certain subunits of ETS complexes (Complex I, III, IV, and V) and mitochondrial rRNAs/tRNAs",
+                    "All enzymes of glycolysis",
+                    "Rubisco enzyme",
+                    "Cellulose synthase"
+                ],
+                correct: 0,
+                explanation: "Mitochondrial genomes encode core hydrophobic subunits of respiratory complexes."
+            },
+            {
+                id: 74, type: "Critical Thinking",
+                topic: "Pentose Phosphate Pathway vs Respiration",
+                question: "How does the oxidative pentose phosphate pathway (PPP) differ functionally from glycolysis and TCA cycle in plants?",
+                options: [
+                    "It generates NADPH for reductive biosynthesis and pentoses for nucleotide formation rather than maximizing ATP yield.",
+                    "It occurs exclusively in chloroplast stroma in darkness.",
+                    "It consumes ATP instead of producing it.",
+                    "It requires oxygen as an obligate substrate."
+                ],
+                correct: 0,
+                explanation: "PPP is an alternative glucose oxidation route dedicated to NADPH and ribose-5-phosphate production."
+            },
+            {
+                id: 75, type: "Critical Thinking",
+                topic: "Oxidative Decarboxylation",
+                question: "Which of the following cofactors is NOT utilized by the multi-enzyme pyruvate dehydrogenase complex?",
+                options: [
+                    "Biotin",
+                    "Thiamine pyrophosphate (TPP)",
+                    "Lipoic acid",
+                    "NAD<sup>+</sup> and FAD"
+                ],
+                correct: 0,
+                explanation: "Biotin is used in carboxylation reactions (like pyruvate carboxylase), not by pyruvate dehydrogenase."
+            },
+            {
+                id: 76, type: "Critical Thinking",
+                topic: "Hexose Monophosphate Shunt",
+                question: "The first step of the oxidative pentose phosphate pathway involves the oxidation of glucose-6-phosphate to 6-phosphoglucono-&delta;-lactone by which enzyme?",
+                options: [
+                    "Glucose-6-phosphate dehydrogenase",
+                    "Hexokinase",
+                    "Phosphofructokinase",
+                    "Aldolase"
+                ],
+                correct: 0,
+                explanation: "Glucose-6-phosphate dehydrogenase is the key regulatory and catalytic enzyme of the oxidative PPP."
+            },
+            {
+                id: 77, type: "Critical Thinking",
+                topic: "Mitochondrial Transport",
+                question: "How does pyruvate cross the outer and inner mitochondrial membranes to enter the matrix?",
+                options: [
+                    "Outer membrane via porins (voltage-dependent anion channels); inner membrane via a specific pyruvate-proton symporter.",
+                    "Simple passive diffusion across both lipid bilayers",
+                    "Endocytosis",
+                    "Active transport powered directly by sunlight"
+                ],
+                correct: 0,
+                explanation: "Pyruvate crosses outer membrane via porins and inner membrane via a dedicated carrier protein."
+            },
+            {
+                id: 78, type: "Critical Thinking",
+                topic: "Energy Charge",
+                question: "If ATP / (ATP + ADP + AMP) ratio in a plant cell is high, which of the following enzymes is inhibited?",
+                options: [
+                    "Phosphofructokinase and Isocitrate dehydrogenase",
+                    "Hexokinase only",
+                    "ATP synthase",
+                    "Alcohol dehydrogenase"
+                ],
+                correct: 0,
+                explanation: "High energy charge inhibits key regulatory catabolic enzymes (PFK and isocitrate dehydrogenase)."
+            },
+            {
+                id: 79, type: "Critical Thinking",
+                topic: "Electron Transport Chain",
+                question: "Which complex in the mitochondrial electron transport chain does NOT pump protons across the inner membrane?",
+                options: [
+                    "Complex II (Succinate dehydrogenase)",
+                    "Complex I",
+                    "Complex III",
+                    "Complex IV"
+                ],
+                correct: 0,
+                explanation: "Complex II transfers electrons from succinate to ubiquinone but does not translocate protons across the membrane."
+            },
+            {
+                id: 80, type: "Critical Thinking",
+                topic: "Cyanide Poisoning",
+                question: "Why does administration of cyanide cause rapid death in multicellular organisms including plants?",
+                options: [
+                    "It inhibits cytochrome c oxidase, halting cellular respiration and ATP production instantly.",
+                    "It causes immediate bursting of cell walls.",
+                    "It converts all water into hydrogen peroxide.",
+                    "It stops photosynthesis in the dark."
+                ],
+                correct: 0,
+                explanation: "Blocking Complex IV halts cellular respiration, causing rapid cytotoxic hypoxia and energy failure."
+            },
+            {
+                id: 81, type: "Critical Thinking",
+                topic: "Photorespiration vs Cellular Respiration",
+                question: "How does photorespiration (C2 cycle) differ fundamentally from standard mitochondrial cellular respiration?",
+                options: [
+                    "Photorespiration is a light-dependent wasteful process involving chloroplast, peroxisome, and mitochondrion that consumes ATP and releases CO<sub>2</sub>, whereas cellular respiration occurs in darkness and light to harvest energy.",
+                    "Photorespiration produces net ATP.",
+                    "Photorespiration occurs exclusively in mitochondria without chloroplast involvement.",
+                    "Photorespiration happens in roots."
+                ],
+                correct: 0,
+                explanation: "Photorespiration is light-driven oxygenase activity of Rubisco, distinct from energy-harvesting dark cellular respiration."
+            },
+            {
+                id: 82, type: "Critical Thinking",
+                topic: "Stoichiometry of Glycolysis",
+                question: "In glycolysis, for every mole of glucose broken down to two moles of pyruvate, how many moles of NADH and ATP (net) are produced?",
+                options: ["2 moles of NADH and 2 moles of net ATP", "4 moles of NADH and 4 moles of ATP", "1 mole of NADH and 4 moles of ATP", "2 moles of NADH and 4 moles of net ATP"],
+                correct: 0,
+                explanation: "Gross ATP = 4, consumed = 2 (net 2 ATP). NADH produced = 2."
+            },
+            {
+                id: 83, type: "Critical Thinking",
+                topic: "RQ Interpretation",
+                question: "A researcher measures gas exchange in germinating seeds and finds that O<sub>2</sub> consumed is 50 mL and CO<sub>2</sub> evolved is 35 mL in 1 hour. What is the probable nature of the respiratory substrate?",
+                options: ["Fat or oil (lipid)", "Carbohydrate", "Organic acid", "Protein"],
+                correct: 0,
+                explanation: "RQ = 35 / 50 = 0.7, which is characteristic of fats/lipids."
+            },
+            {
+                id: 84, type: "Critical Thinking",
+                topic: "Mitochondrial Cristae",
+                question: "What is the biological advantage of extensive folding of the inner mitochondrial membrane into cristae?",
+                options: [
+                    "It provides a large surface area to accommodate numerous ETS complexes and ATP synthase enzymes.",
+                    "It stores excess starch reserves.",
+                    "It prevents protons from leaking into the cytoplasm.",
+                    "It facilitates entry of light photons."
+                ],
+                correct: 0,
+                explanation: "Increased surface area maximizes capacity for oxidative phosphorylation."
+            },
+            {
+                id: 85, type: "Critical Thinking",
+                topic: "Respiration Temperature Coefficient",
+                question: "The temperature coefficient ($Q_{10}$) for cellular respiration in most plants between 10&deg;C and 30&deg;C is typically around:",
+                options: ["2.0 to 2.5", "1.0", "5.0", "0.5"],
+                correct: 0,
+                explanation: "A Q10 of 2.0-2.5 means the rate of respiration doubles or slightly more for every 10&deg;C rise in temperature."
+            },
+
+            // Diagram Based (86-90) - Represented with text/ASCII structure and conceptual analysis
+            {
+                id: 86, type: "Diagram Based",
+                topic: "Glycolysis Pathway Diagram",
+                question: "<strong>Diagram Analysis:</strong> Examine the standard glycolytic pathway flowchart.<br><pre style='background:#f1f5f9;padding:10px;border-radius:6px;font-size:0.8rem;'>Glucose (6C) &rarr; [Step A] &rarr; Fructose-1,6-bisphosphate (6C) &rarr; [Step B] &rarr; 2 x Glyceraldehyde-3-phosphate (3C)</pre><br>Identify the enzymes catalyzing Step A and Step B respectively:",
+                options: [
+                    "Step A: Hexokinase / Phosphofructokinase; Step B: Aldolase",
+                    "Step A: Pyruvate kinase; Step B: Lactate dehydrogenase",
+                    "Step A: Citrate synthase; Step B: Aconitase",
+                    "Step A: ATP synthase; Step B: Enolase"
+                ],
+                correct: 0,
+                explanation: "Phosphofructokinase catalyzes phosphorylation of fructose-6-phosphate to fructose-1,6-bisphosphate, and aldolase splits it into two 3C triose phosphates."
+            },
+            {
+                id: 87, type: "Diagram Based",
+                topic: "Mitochondrial ETS Diagram",
+                question: "<strong>Diagram Analysis:</strong> In a diagram of the mitochondrial electron transport chain, electrons flow from Complex I &rarr; Ubiquinone &rarr; Complex III &rarr; Cytochrome c &rarr; Complex IV &rarr; O<sub>2</sub>.<br>Which complex is responsible for reducing molecular oxygen ($O_2$) into water ($H_2O$)?",
+                options: ["Complex IV (Cytochrome c oxidase)", "Complex I", "Complex II", "Complex V (ATP synthase)"],
+                correct: 0,
+                explanation: "Complex IV transfers electrons to final acceptor O2 along with protons from matrix to form water."
+            },
+            {
+                id: 88, type: "Diagram Based",
+                topic: "TCA Cycle Diagram",
+                question: "<strong>Diagram Analysis:</strong> Looking at the cyclic representation of the TCA cycle, which step involves substrate-level phosphorylation where succinyl-CoA is converted to succinic acid?",
+                options: [
+                    "Succinyl-CoA &rarr; Succinic acid (producing GTP/ATP)",
+                    "Isocitrate &rarr; Oxalosuccinate",
+                    "Malate &rarr; Oxaloacetate",
+                    "Citrate &rarr; Isocitrate"
+                ],
+                correct: 0,
+                explanation: "Conversion of succinyl-CoA to succinic acid couples cleavage of high-energy thioester bond with phosphorylation of GDP to GTP."
+            },
+            {
+                id: 89, type: "Diagram Based",
+                topic: "Chemiosmotic Coupling Diagram",
+                question: "<strong>Diagram Analysis:</strong> A diagram showing ATP synthase (F<sub>0</sub>-F<sub>1</sub>) embedded in the inner mitochondrial membrane indicates proton flow.<br>In which direction do protons flow through the F<sub>0</sub> channel to drive ATP synthesis in the matrix?",
+                options: [
+                    "From intermembrane space to mitochondrial matrix",
+                    "From mitochondrial matrix to intermembrane space",
+                    "From cytoplasm directly into nucleus",
+                    "From outer membrane to exterior medium"
+                ],
+                correct: 0,
+                explanation: "Protons flow down their electrochemical gradient from the intermembrane space back into the matrix through F0."
+            },
+            {
+                id: 90, type: "Diagram Based",
+                topic: "Amphibolic Pathways Diagram",
+                question: "<strong>Diagram Analysis:</strong> In a schematic diagram of amphibolic pathways connecting carbohydrates, lipids, and proteins:<br>Acetyl-CoA acts as a major junction point. Which of the following molecules feeds directly into acetyl-CoA?",
+                options: ["Fatty acids (via beta-oxidation) and Pyruvate", "Glucose directly", "Ribulose-5-phosphate", "Inorganic phosphate"],
+                correct: 0,
+                explanation: "Fatty acids break down into acetyl-CoA, and pyruvate undergoes oxidative decarboxylation to form acetyl-CoA."
+            }
+        ];
+
+        let userResponses = new Array(90).fill(null); // stores selected option index
+        let questionStatus = new Array(90).fill('not-visited'); // not-visited, not-answered, answered, marked, answered-marked
+
+        // --- DOM ELEMENTS ---
+        const loginScreen = document.getElementById('loginScreen');
+        const instructionsScreen = document.getElementById('instructionsScreen');
+        const examScreen = document.getElementById('examScreen');
+        const resultScreen = document.getElementById('resultScreen');
+
+        const verificationForm = document.getElementById('verificationForm');
+        const userNameInput = document.getElementById('userNameInput');
+        const examPasswordInput = document.getElementById('examPasswordInput');
+        const captchaInput = document.getElementById('captchaInput');
+        const captchaBox = document.getElementById('captchaBox');
+        const refreshCaptchaBtn = document.getElementById('refreshCaptcha');
+
+        const agreeCheckbox = document.getElementById('agreeCheckbox');
+        const startExamBtn = document.getElementById('startExamBtn');
+
+        const headerTimerSection = document.getElementById('headerTimerSection');
+        const candidateNameDisplay = document.getElementById('candidateNameDisplay');
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        const questionTypeBadge = document.getElementById('questionTypeBadge');
+        const currentQNum = document.getElementById('currentQNum');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const markReviewBtn = document.getElementById('markReviewBtn');
+        const clearResponseBtn = document.getElementById('clearResponseBtn');
+        const submitExamTriggerBtn = document.getElementById('submitExamTriggerBtn');
+
+        const paletteGrid = document.getElementById('paletteGrid');
+        const countAnswered = document.getElementById('countAnswered');
+        const countNotAnswered = document.getElementById('countNotAnswered');
+        const countNotVisited = document.getElementById('countNotVisited');
+        const countMarked = document.getElementById('countMarked');
+
+        // --- CAPTCHA GENERATOR ---
+        let currentCaptcha = "";
+        function generateCaptcha() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let code = "";
+            for (let i = 0; i < 5; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCaptcha = code;
+            captchaBox.textContent = currentCaptcha;
+        }
+        generateCaptcha();
+        refreshCaptchaBtn.addEventListener('click', generateCaptcha);
+
+        // --- VERIFICATION FLOW ---
+        verificationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            userName = userNameInput.value.trim();
+            const password = examPasswordInput.value.trim();
+            const userCaptcha = captchaInput.value.trim();
+
+            // Password format DDMMYYYY for Oct 11, 2026 is 11102026
+            if (password !== "11102026") {
+                alert("Incorrect exam date password! Please enter today's date in DDMMYYYY format (11102026).");
+                return;
+            }
+
+            if (userCaptcha.toUpperCase() !== currentCaptcha) {
+                alert("Incorrect captcha code! Please try again.");
+                generateCaptcha();
+                captchaInput.value = "";
+                return;
+            }
+
+            // Transition to instructions screen
+            loginScreen.classList.add('hidden');
+            instructionsScreen.classList.remove('hidden');
+        });
+
+        agreeCheckbox.addEventListener('change', () => {
+            if (agreeCheckbox.checked) {
+                startExamBtn.disabled = false;
+                startExamBtn.classList.remove('bg-slate-400', 'cursor-not-allowed');
+                startExamBtn.classList.add('bg-amber-600', 'hover:bg-amber-700', 'cursor-pointer');
+            } else {
+                startExamBtn.disabled = true;
+                startExamBtn.classList.add('bg-slate-400', 'cursor-not-allowed');
+                startExamBtn.classList.remove('bg-amber-600', 'hover:bg-amber-700', 'cursor-pointer');
+            }
+        });
+
+        // --- START EXAM ---
+        startExamBtn.addEventListener('click', () => {
+            // Full screen enforcement
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => console.log(err));
+            }
+
+            // Setup Watermark
+            const watermarkContainer = document.getElementById('watermarkContainer');
+            let wmText = `${userName} - 8910587106 - NEET 2026`;
+            watermarkContainer.innerHTML = `${wmText} &nbsp;&nbsp;&nbsp;&nbsp; `.repeat(30);
+
+            // Set candidate info
+            candidateNameDisplay.textContent = userName;
+
+            // Transition screens
+            instructionsScreen.classList.add('hidden');
+            examScreen.classList.remove('hidden');
+            headerTimerSection.classList.remove('hidden');
+            headerTimerSection.classList.add('flex');
+
+            examActive = true;
+            questionStatus[0] = 'not-answered'; // first question visited
+
+            buildPalette();
+            loadQuestion(0);
+            startTimer();
+        });
+
+        // --- TIMER ---
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                let hrs = Math.floor(timeLeft / 3600);
+                let mins = Math.floor((timeLeft % 3600) / 60);
+                let secs = timeLeft % 60;
+                timerDisplay.textContent = `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time is up! Submitting examination automatically.");
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        // --- BUILD PALETTE ---
+        function buildPalette() {
+            paletteGrid.innerHTML = "";
+            for (let i = 0; i < 90; i++) {
+                const btn = document.createElement('div');
+                btn.textContent = i + 1;
+                btn.className = `palette-btn ${getStatusClass(questionStatus[i])}`;
+                if (i === currentQuestionIndex) {
+                    btn.classList.add('ring-2', 'ring-slate-900', 'ring-offset-2');
+                }
+                btn.addEventListener('click', () => {
+                    saveCurrentResponseState();
+                    currentQuestionIndex = i;
+                    if (questionStatus[i] === 'not-visited') {
+                        questionStatus[i] = 'not-answered';
+                    }
+                    loadQuestion(currentQuestionIndex);
+                    updatePaletteUI();
+                });
+                paletteGrid.appendChild(btn);
+            }
+            updatePaletteCounts();
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'not-visited': return 'status-not-visited';
+                case 'not-answered': return 'status-not-answered';
+                case 'answered': return 'status-answered';
+                case 'marked': return 'status-marked';
+                case 'answered-marked': return 'status-answered-marked';
+                default: return 'status-not-visited';
+            }
+        }
+
+        function updatePaletteUI() {
+            const buttons = paletteGrid.children;
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].className = `palette-btn ${getStatusClass(questionStatus[i])}`;
+                if (i === currentQuestionIndex) {
+                    buttons[i].classList.add('ring-2', 'ring-slate-900', 'ring-offset-2');
+                }
+            }
+            updatePaletteCounts();
+        }
+
+        function updatePaletteCounts() {
+            let nv = 0, na = 0, ans = 0, mrk = 0;
+            for (let s of questionStatus) {
+                if (s === 'not-visited') nv++;
+                else if (s === 'not-answered') na++;
+                else if (s === 'answered' || s === 'answered-marked') ans++;
+                if (s === 'marked' || s === 'answered-marked') mrk++;
+            }
+            countNotVisited.textContent = nv;
+            countNotAnswered.textContent = na;
+            countAnswered.textContent = ans;
+            countMarked.textContent = mrk;
+        }
+
+        // --- LOAD QUESTION ---
+        function loadQuestion(index) {
+            const q = rawQuestions[index];
+            questionTypeBadge.textContent = q.type + " | " + q.topic;
+            currentQNum.textContent = index + 1;
+            questionText.innerHTML = q.question;
+
+            optionsContainer.innerHTML = "";
+            q.options.forEach((opt, optIdx) => {
+                const isChecked = userResponses[index] === optIdx;
+                const optDiv = document.createElement('label');
+                optDiv.className = `flex items-start p-3 border rounded-lg cursor-pointer transition ${isChecked ? 'border-amber-600 bg-amber-50/50' : 'border-slate-200 hover:bg-slate-50'}`;
+                optDiv.innerHTML = `
+                    <input type="radio" name="questionOption" value="${optIdx}" ${isChecked ? 'checked' : ''} class="mt-1 h-4 w-4 text-amber-600 focus:ring-amber-500 border-slate-300">
+                    <span class="ml-3 text-sm text-slate-700 font-medium">${String.fromCharCode(65 + optIdx)}. ${opt}</span>
+                `;
+                optDiv.querySelector('input').addEventListener('change', () => {
+                    userResponses[index] = optIdx;
+                    if (questionStatus[index] === 'marked') {
+                        questionStatus[index] = 'answered-marked';
+                    } else {
+                        questionStatus[index] = 'answered';
+                    }
+                    updatePaletteUI();
+                });
+                optionsContainer.appendChild(optDiv);
+            });
+            updatePaletteUI();
+        }
+
+        function saveCurrentResponseState() {
+            // State is handled instantly on radio button change
+        }
+
+        // --- NAVIGATION BUTTONS ---
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < 89) {
+                currentQuestionIndex++;
+                if (questionStatus[currentQuestionIndex] === 'not-visited') {
+                    questionStatus[currentQuestionIndex] = 'not-answered';
+                }
+                loadQuestion(currentQuestionIndex);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                if (questionStatus[currentQuestionIndex] === 'not-visited') {
+                    questionStatus[currentQuestionIndex] = 'not-answered';
+                }
+                loadQuestion(currentQuestionIndex);
+            }
+        });
+
+        markReviewBtn.addEventListener('click', () => {
+            if (userResponses[currentQuestionIndex] !== null) {
+                questionStatus[currentQuestionIndex] = 'answered-marked';
+            } else {
+                questionStatus[currentQuestionIndex] = 'marked';
+            }
+            updatePaletteUI();
+            if (currentQuestionIndex < 89) {
+                currentQuestionIndex++;
+                if (questionStatus[currentQuestionIndex] === 'not-visited') {
+                    questionStatus[currentQuestionIndex] = 'not-answered';
+                }
+                loadQuestion(currentQuestionIndex);
+            }
+        });
+
+        clearResponseBtn.addEventListener('click', () => {
+            userResponses[currentQuestionIndex] = null;
+            questionStatus[currentQuestionIndex] = 'not-answered';
+            loadQuestion(currentQuestionIndex);
+            updatePaletteUI();
+        });
+
+        submitExamTriggerBtn.addEventListener('click', () => {
+            if (confirm("Are you sure you want to submit the examination? You cannot make changes after submission.")) {
+                submitExam();
+            }
+        });
+
+        // --- SUBMIT EXAM & GENERATE REPORT ---
+        function submitExam() {
+            clearInterval(timerInterval);
+            examActive = false;
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.log(err));
+            }
+
+            // Calculate scores
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let unattemptedCount = 0;
+
+            rawQuestions.forEach((q, idx) => {
+                const userAns = userResponses[idx];
+                if (userAns === null) {
+                    unattemptedCount++;
+                } else if (userAns === q.correct) {
+                    correctCount++;
+                } else {
+                    incorrectCount++;
+                }
+            });
+
+            const totalScore = (correctCount * 4) - (incorrectCount * 1);
+            const accuracy = (correctCount + incorrectCount) > 0 ? Math.round((correctCount / (correctCount + incorrectCount)) * 100) : 0;
+
+            // Populate Report UI
+            document.getElementById('reportCandidateName').textContent = userName;
+            document.getElementById('reportTotalScore').textContent = `${totalScore} / 360`;
+            document.getElementById('reportCorrectCount').textContent = correctCount;
+            document.getElementById('reportIncorrectCount').textContent = incorrectCount;
+            document.getElementById('reportAccuracy').textContent = `${accuracy}%`;
+
+            // Render Chart
+            renderPerformanceChart(correctCount, incorrectCount, unattemptedCount);
+
+            // Populate Weak Areas
+            populateWeakAreas(correctCount, incorrectCount);
+
+            // Populate Answer Keys
+            populateAnswerKeys();
+
+            // Switch screens
+            examScreen.classList.add('hidden');
+            headerTimerSection.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderPerformanceChart(correct, incorrect, unattempted) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct (+4)', 'Incorrect (-1)', 'Unattempted (0)'],
+                    datasets: [{
+                        data: [correct, incorrect, unattempted],
+                        backgroundColor: ['#22c55e', '#ef4444', '#cbd5e1'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function populateWeakAreas(correct, incorrect) {
+            const weakAreasList = document.getElementById('weakAreasList');
+            weakAreasList.innerHTML = "";
+            
+            const weakTopics = [
+                "Cellular respiration stoichiometry & ATP yield calculations",
+                "Electron transport system complexes and proton translocation kinetics",
+                "Amphibolic pathway intermediates and anaplerotic reactions",
+                "Respiratory quotient variations across fats, organic acids, and anaerobiosis"
+            ];
+
+            weakTopics.forEach(topic => {
+                const li = document.createElement('li');
+                li.textContent = topic;
+                weakAreasList.appendChild(li);
+            });
+        }
+
+        function populateAnswerKeys() {
+            const container = document.getElementById('answerKeysContainer');
+            container.innerHTML = "";
+
+            rawQuestions.forEach((q, idx) => {
+                const userAns = userResponses[idx];
+                const isCorrect = userAns === q.correct;
+                const div = document.createElement('div');
+                div.className = `p-4 rounded-xl border ${isCorrect ? 'bg-emerald-50/50 border-emerald-200' : 'bg-red-50/50 border-red-200'}`;
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-md ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
+                            Q${idx + 1}: ${q.type} (${q.topic})
+                        </span>
+                        <span class="text-xs font-semibold ${isCorrect ? 'text-emerald-600' : 'text-red-600'}">
+                            ${isCorrect ? 'Correct (+4)' : (userAns === null ? 'Unattempted (0)' : 'Incorrect (-1)')}
+                        </span>
+                    </div>
+                    <p class="text-sm font-medium text-slate-900 mb-2">${q.question}</p>
+                    <p class="text-xs text-slate-700 mb-1"><strong>Your Answer:</strong> ${userAns !== null ? String.fromCharCode(65 + userAns) + ". " + q.options[userAns] : 'Not Answered'}</p>
+                    <p class="text-xs text-emerald-700 mb-2"><strong>Correct Answer:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</p>
+                    <div class="bg-white/80 p-2.5 rounded-lg border border-slate-200 text-xs text-slate-600">
+                        <strong>Explanation:</strong> ${q.explanation}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // --- DOWNLOAD & WHATSAPP REPORT ACTIONS ---
+        document.getElementById('downloadReportBtn').addEventListener('click', () => {
+            const element = document.getElementById('printableReport');
+            html2canvas(element, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `${userName}_NEET_Respiration_Report.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+
+        document.getElementById('sendWhatsAppBtn').addEventListener('click', () => {
+            const element = document.getElementById('printableReport');
+            html2canvas(element, { scale: 2 }).then(canvas => {
+                canvas.toBlob(blob => {
+                    const file = new File([blob], `${userName}_scorecard.png`, { type: "image/png" });
+                    
+                    // Trigger download as backup
+                    const link = document.createElement('a');
+                    link.download = file.name;
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+
+                    const totalScore = document.getElementById('reportTotalScore').textContent;
+                    const msg = encodeURIComponent(`Hello Soumendra Sir, I am ${userName}. I have completed NEET Biology Exam Series 8 Set A (Respiration in Plants). My Total Score is ${totalScore}. Attached is my score report image.`);
+                    
+                    // Open WhatsApp chat to 8910587106
+                    window.open(`https://wa.me/918910587106?text=${msg}`, '_blank');
+                    alert("Scorecard image downloaded successfully! Please share the downloaded image directly on WhatsApp to Soumendra Sir (8910587106).");
+                });
+            });
+        });
+    </script>
+</body>
+</html>
